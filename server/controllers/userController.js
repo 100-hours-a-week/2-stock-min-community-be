@@ -6,20 +6,20 @@ const userModel = require('../models/userModel');
 // USER
 exports.getRegistPage = (req, res) => {
   res.sendFile(
-    path.join(__dirname, '../../Public', 'Html', 'user_regist.html')
+    path.join(__dirname, '../../../fe/Public/Html/user_regist.html')
   );
 };
 exports.getLoginPage = (req, res) => {
-  res.sendFile(path.join(__dirname, '../../Public', 'Html', 'user_login.html'));
+  res.sendFile(path.join(__dirname, '../../../fe/Public/Html/user_login.html'));
 };
 exports.getModifyNicknamePage = (req, res) => {
   res.sendFile(
-    path.join(__dirname, '../../Public', 'Html', 'user_nickname_modify.html')
+    path.join(__dirname, '../../../fe/Public/Html/user_nickname_modify.html')
   );
 };
 exports.getModifyPasswordPage = (req, res) => {
   res.sendFile(
-    path.join(__dirname, '../../Public', 'Html', 'user_password_modify.html')
+    path.join(__dirname, '../../../fe/Public/Html/user_password_modify.html')
   );
 };
 

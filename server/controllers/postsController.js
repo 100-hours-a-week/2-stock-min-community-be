@@ -4,22 +4,22 @@ const path = require('path');
 
 exports.getPostListPage = (req, res) => {
   res.sendFile(
-    path.join(__dirname, '../../Public', 'Html', 'post', 'post_list.html')
+    path.join(__dirname, '../../../fe/Public/Html/post/post_list.html')
   );
 };
 exports.getPostNewPage = (req, res) => {
   res.sendFile(
-    path.join(__dirname, '../../Public', 'Html', 'post', 'post_add.html')
+    path.join(__dirname, '../../../fe/Public/Html/post/post_add.html')
   );
 };
 exports.getPostDetail = (req, res) => {
   res.sendFile(
-    path.join(__dirname, '../../Public', 'Html', 'post', 'post_detail.html')
+    path.join(__dirname, '../../../fe/Public/Html/post/post_detail.html')
   );
 };
 exports.getModifyPage = (req, res) => {
   res.sendFile(
-    path.join(__dirname, '../../Public', 'Html', 'post', 'post_modify.html')
+    path.join(__dirname, '../../../fe/Public/Html/post/post_modify.html')
   );
 };
 

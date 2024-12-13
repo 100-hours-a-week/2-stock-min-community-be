@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routers/userRoutes');
-const postsRoutes = require('./routers/postsRouter');
+const userRoutes = require('../be/server/routers/userRoutes');
+const postsRoutes = require('../be/server/routers/postsRouter');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -16,7 +16,7 @@ app.use(
   '/uploads',
   express.static(path.join(__dirname, 'middlewares', 'uploads'))
 );
-app.use(express.static(path.join(__dirname, '../Public')));
+app.use(express.static(path.join(__dirname, '../fe/Public')));
 
 app.use(
   session({
