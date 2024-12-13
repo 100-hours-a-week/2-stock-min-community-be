@@ -5,7 +5,8 @@ const connection = require('../db');
 // 파일 경로 설정
 const filePath = path.join(__dirname, '../data/posts.json');
 
-function anyQuery(query, callback) {
+function getPostImage(postID, callback) {
+  const query = `SELECT postImage from POSTS WHERE post_id = ${postID}`;
   connection.query(query, (err, results) => {
     if (err) return callback(err, null);
     callback(null, results);
@@ -21,10 +22,11 @@ function getPosts(callback) {
 }
 
 function addPosts(post, callback) {
-  const query = `INSERT INTO POSTS (postImage, title, content, \`like\`, comment, view, postDate, autor,autorProfile) VALUES (?,?,?,?,?,?,?,?,?)`;
+  const query = `INSERT INTO POSTS (user_id,postImage, title, content, \`like\`, comment, view, postDate, autor,autorProfile) VALUES (?,?,?,?,?,?,?,?,?,?)`;
   connection.query(
     query,
     [
+      post.userID,
       post.postImage,
       post.title,
       post.content,
@@ -127,7 +129,7 @@ module.exports = {
   getComment,
   deleteComment,
   patchComment,
-  anyQuery,
+  getPostImage,
   deletePostComment,
   countComment,
 };

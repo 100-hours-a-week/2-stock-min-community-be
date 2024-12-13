@@ -28,7 +28,7 @@ exports.createPost = (req, res) => {
 
   const postData = {
     postImage: req.file ? `/uploads/postImage/${req.file.filename}` : '',
-    userID: 0,
+    userID: req.session.user.id,
     title,
     content,
     like: 0,
@@ -49,15 +49,9 @@ exports.createPost = (req, res) => {
 };
 exports.updatePost = (req, res) => {
   //전에 있던 이미지 파일 삭제
-  const query = `SELECT postImage from POSTS WHERE post_id = ${req.body.postID}`;
-  postsModel.anyQuery(query, (err, results) => {
-    if (err) return res.status(500).send('Error get query');
-
-    const filePath = path.join(
-      __dirname,
-      '../middlewares',
-      results[0].postImage
-    );
+  postsModel.getPostImage(req.body.postID, (err, results) => {
+    if (err) return res.status(500).send('Error get postImage');
+    const filePath = path.join(__dirname, `..${results[0].postImage}`);
     fs.unlink(filePath, (err) => {
       if (err) {
         console.error('파일 삭제중 오류 발생 : ', err);
@@ -78,12 +72,22 @@ exports.updatePost = (req, res) => {
   });
 };
 exports.deletePost = (req, res) => {
+  postsModel.getPostImage(req.params.postID, (err, results) => {
+    if (err) return res.status(500).send('get Post Image');
+    const filePath = path.join(__dirname, `..${results[0].postImage}`);
+    console.log(filePath);
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error('파일 삭제중 오류 발생 : ', err);
+      } else {
+        console.log('파일삭제 성공');
+      }
+    });
+  });
   postsModel.deletePosts(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('Error Delete Post');
+
     res.status(200).send({ message: 'Post Delete Success' });
-  });
-  postsModel.deletePostComment(req.params.postID, (err, results) => {
-    if (err) return res.status(500).send('Error Delete All Post`s Comment');
   });
 };
 exports.getPosts = (req, res) => {

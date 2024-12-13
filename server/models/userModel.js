@@ -55,4 +55,21 @@ function patchUser(patchData, callback) {
   });
 }
 
-module.exports = { getUsers, addUser, isEmailDuplicate, deleteUser, patchUser };
+function deleteUserPostImage(userID, callback) {
+  const query = `SELECT postImage FROM POSTS WHERE user_id = ${userID}`;
+  connection.query(query, (err, results) => {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, results);
+  });
+}
+
+module.exports = {
+  getUsers,
+  addUser,
+  isEmailDuplicate,
+  deleteUser,
+  patchUser,
+  deleteUserPostImage,
+};

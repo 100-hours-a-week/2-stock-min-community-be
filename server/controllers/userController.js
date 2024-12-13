@@ -52,18 +52,32 @@ exports.createUser = (req, res) => {
 };
 exports.deleteUser = (req, res) => {
   const id = req.session.user.id;
-  const filePath = path.join(
-    __dirname,
-    '../middlewares',
-    req.session.user.profile
-  );
+  const filePathProfile = path.join(__dirname, `..${req.session.user.profile}`);
+  userModel.deleteUserPostImage(id, (err, result) => {
+    if (err) return res.status(500).send('get PostImage error');
 
+    if (result) {
+      result.map((element) => {
+        const filePathPostImage = path.join(
+          __dirname,
+          `..${element.postImage}`
+        );
+        fs.unlink(filePathPostImage, (err) => {
+          if (err) {
+            console.error('파일 삭제 중 오류 발생', err);
+          } else {
+            console.log('파일 삭제 성공');
+          }
+        });
+      });
+    }
+  });
   userModel.deleteUser(id, (error, results) => {
     if (error) {
       res.status(500).send('회원탈퇴 실패');
       return;
     }
-    fs.unlink(filePath, (err) => {
+    fs.unlink(filePathProfile, (err) => {
       if (err) {
         console.error('파일 삭제 중 오류 발생', err);
       } else {
