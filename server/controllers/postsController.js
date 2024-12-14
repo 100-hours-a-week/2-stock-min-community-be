@@ -75,7 +75,7 @@ exports.deletePost = (req, res) => {
   postsModel.getPostImage(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('get Post Image');
     const filePath = path.join(__dirname, `..${results[0].postImage}`);
-    console.log(filePath);
+
     fs.unlink(filePath, (err) => {
       if (err) {
         console.error('파일 삭제중 오류 발생 : ', err);

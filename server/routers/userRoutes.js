@@ -38,6 +38,6 @@ router.get('/user', isAuthenticated, userController.getCurrentUser);
 router.patch('/user', isAuthenticated, userController.patchUser);
 router.delete('/user', isAuthenticated, userController.deleteUser);
 
-router.post('/check-email', userController.checkEmail);
+router.post('/check-duplicated', userController.checkDuplicated);
 
 module.exports = router;

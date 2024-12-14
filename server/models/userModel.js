@@ -10,8 +10,9 @@ function getUsers(callback) {
   });
 }
 
-function isEmailDuplicate(callback) {
-  const query = 'SELECT email FROM USER';
+//중복값확인
+function isDuplicated(field, callback) {
+  const query = `SELECT ${field} FROM USER`;
   connection.query(query, (err, results) => {
     if (err) {
       return callback(err, null);
@@ -22,7 +23,6 @@ function isEmailDuplicate(callback) {
 
 // 사용자 데이터 추가하기
 function addUser(user, callback) {
-  console.log(user);
   const query =
     'INSERT INTO USER (email,profile,password,nickname) VALUES (?,?,?,?)';
   connection.query(
@@ -68,7 +68,7 @@ function deleteUserPostImage(userID, callback) {
 module.exports = {
   getUsers,
   addUser,
-  isEmailDuplicate,
+  isDuplicated,
   deleteUser,
   patchUser,
   deleteUserPostImage,

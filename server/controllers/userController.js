@@ -143,7 +143,6 @@ exports.logout = (req, res) => {
       console.error('세션 삭제 실패:', err);
       return res.status(500).send('Error deleting session');
     }
-    console.log('success delete');
     res.clearCookie('connect.sid'); // 세션 쿠키 삭제
     res.status(200).send('User successfully deleted');
   });
@@ -151,22 +150,22 @@ exports.logout = (req, res) => {
 exports.fetchUsers = (req, res) => {
   userModel.getUsers((err, results) => {
     if (err) {
-      res.status(500).send('사용자 데이터를 가져오는데 실패했습니다');
+      res.status(500).send('can not access user info');
       return;
     }
     res.status(200).json(results);
   });
 };
 
-exports.checkEmail = (req, res) => {
-  const { email } = req.body;
+exports.checkDuplicated = (req, res) => {
+  const { data, field } = req.body;
 
-  userModel.isEmailDuplicate((error, results) => {
+  userModel.isDuplicated(field, (error, results) => {
     if (error) {
-      res.status(500).send('이메일 불러오기 실패');
+      res.status(500).send('error check duplicated');
       return false;
     }
-    if (results.some((element) => element.email === email)) {
+    if (results.some((element) => element[`${field}`] === data)) {
       return res.json({ duplicated: true });
     } else {
       return res.json({ duplicated: false });
