@@ -125,6 +125,7 @@ exports.countComment = (req, res) => {
 //   const postID = req.params.postID;
 // };
 exports.countView = (req, res) => {
+  console.log(req.session);
   const userID = req.session.user.id;
   const postID = req.params.postID;
   postsModel.addView(userID, postID, (err, results) => {

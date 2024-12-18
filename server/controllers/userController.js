@@ -45,11 +45,11 @@ exports.createUser = (req, res) => {
 exports.deleteUser = (req, res) => {
   const id = req.session.user.id;
   const filePathProfile = path.join(__dirname, `..${req.session.user.profile}`);
-  userModel.deleteUserPostImage(id, (err, result) => {
+  userModel.deleteUserPostImage(id, (err, results) => {
     if (err) return res.status(500).send('get PostImage error');
 
-    if (result) {
-      result.map((element) => {
+    if (results) {
+      results.map((element) => {
         const filePathPostImage = path.join(
           __dirname,
           `..${element.postImage}`
