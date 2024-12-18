@@ -10,7 +10,6 @@ function isAuthenticated(req, res, next) {
   next(); // 인증 통과 시 다음 로직으로 진행
 }
 // USER
-router.get('/regist', userController.getRegistPage);
 
 router.post(
   '/regist',
@@ -18,25 +17,14 @@ router.post(
   userController.createUser
 );
 
-router.get('/login', userController.getLoginPage);
 router.post('/login', userController.login);
-router.get('/logout', isAuthenticated, userController.logout);
+router.get('/logout', userController.logout);
 
 router.get('/users', userController.fetchUsers);
-router.get(
-  '/user/nickname',
-  isAuthenticated,
-  userController.getModifyNicknamePage
-);
-router.get(
-  '/user/password',
-  isAuthenticated,
-  userController.getModifyPasswordPage
-);
 
-router.get('/user', isAuthenticated, userController.getCurrentUser);
-router.patch('/user', isAuthenticated, userController.patchUser);
-router.delete('/user', isAuthenticated, userController.deleteUser);
+router.get('/user', userController.getCurrentUser);
+router.patch('/user', userController.patchUser);
+router.delete('/user', userController.deleteUser);
 
 router.post('/check-duplicated', userController.checkDuplicated);
 

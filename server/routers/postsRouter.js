@@ -10,48 +10,53 @@ function isAuthenticated(req, res, next) {
   next(); // 인증 통과 시 다음 로직으로 진행
 }
 
-router.get('/list', isAuthenticated, postsController.getPostListPage);
-router.get('/', isAuthenticated, postsController.getPosts);
-router.get('/edit/:postID', isAuthenticated, postsController.getModifyPage);
+router.get('/', postsController.getPosts);
+
 router.post(
   '/',
-  isAuthenticated,
+
   upload('postImage').single('postImage'),
   postsController.createPost
 );
 
 router.patch(
   '/:postID',
-  isAuthenticated,
+
   upload('postImage').single('postIMG'),
   postsController.updatePost
 );
-router.delete('/:postID', isAuthenticated, postsController.deletePost);
+router.delete('/:postID', postsController.deletePost);
 
-router.get('/new', isAuthenticated, postsController.getPostNewPage);
-router.get('/:postID', isAuthenticated, postsController.getPostDetail);
+// router.get('/new',  postsController.getPostNewPage);
+// router.get('/:postID',  postsController.getPostDetail);
 
-//Count
+//LCV
 router.get(
   '/:postID/count/comment',
-  isAuthenticated,
+
   postsController.countComment
 );
-router.get('/:postID/count/view', isAuthenticated, postsController.countView);
-router.get('/:postID/count/like', isAuthenticated, postsController.countLike);
-router.post('/:postID/count/like', isAuthenticated, postsController.addLike);
+router.get('/:postID/count/view', postsController.countView);
+router.get('/:postID/count/like', postsController.countLike);
+router.get('/:postID/check/like', postsController.checkLike);
+router.post('/:postID/count/like', postsController.addLike);
+router.delete(
+  '/:postID/count/like',
+
+  postsController.deleteLike
+);
 
 // COMMENT
-router.get('/comment/:postID', isAuthenticated, postsController.getComment);
-router.post('/comment/:postID', isAuthenticated, postsController.createComment);
+router.get('/comment/:postID', postsController.getComment);
+router.post('/comment/:postID', postsController.createComment);
 router.patch(
   '/comment/:commentID',
-  isAuthenticated,
+
   postsController.patchComment
 );
 router.delete(
   '/comment/:commentID',
-  isAuthenticated,
+
   postsController.deleteComment
 );
 

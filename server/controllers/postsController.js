@@ -2,27 +2,6 @@ const fs = require('fs');
 const postsModel = require('../models/postsModel');
 const path = require('path');
 
-exports.getPostListPage = (req, res) => {
-  res.sendFile(
-    path.join(__dirname, '../../../fe/Public/Html/post/post_list.html')
-  );
-};
-exports.getPostNewPage = (req, res) => {
-  res.sendFile(
-    path.join(__dirname, '../../../fe/Public/Html/post/post_add.html')
-  );
-};
-exports.getPostDetail = (req, res) => {
-  res.sendFile(
-    path.join(__dirname, '../../../fe/Public/Html/post/post_detail.html')
-  );
-};
-exports.getModifyPage = (req, res) => {
-  res.sendFile(
-    path.join(__dirname, '../../../fe/Public/Html/post/post_modify.html')
-  );
-};
-
 exports.createPost = (req, res) => {
   const { title, content, postDate } = req.body;
 
@@ -51,20 +30,20 @@ exports.updatePost = (req, res) => {
   //전에 있던 이미지 파일 삭제
   postsModel.getPostImage(req.body.postID, (err, results) => {
     if (err) return res.status(500).send('Error get postImage');
-    const filePath = path.join(__dirname, `..${results[0].postImage}`);
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error('파일 삭제중 오류 발생 : ', err);
-      } else {
-        console.log('파일삭제 성공');
-      }
-    });
+    if (results.postImage) {
+      const filePath = path.join(__dirname, `..${results[0].postImage}`);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('파일 삭제중 오류 발생 : ', err);
+        } else {
+          console.log('파일삭제 성공');
+        }
+      });
+    }
   });
 
   //게시글 수정
-  const profilePath = req.file
-    ? `/uploads/postImage/${req.file.filename}`
-    : null;
+  const profilePath = req.file ? `/uploads/postImage/${req.file.filename}` : '';
   req.body.postIMG = profilePath;
   postsModel.updatePosts(req.body, (err, results) => {
     if (err) return res.status(500).send('Error Update Post');
@@ -74,15 +53,17 @@ exports.updatePost = (req, res) => {
 exports.deletePost = (req, res) => {
   postsModel.getPostImage(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('get Post Image');
-    const filePath = path.join(__dirname, `..${results[0].postImage}`);
 
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error('파일 삭제중 오류 발생 : ', err);
-      } else {
-        console.log('파일삭제 성공');
-      }
-    });
+    if (results.postImage) {
+      const filePath = path.join(__dirname, `..${results[0].postImage}`);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('파일 삭제중 오류 발생 : ', err);
+        } else {
+          console.log('파일삭제 성공');
+        }
+      });
+    }
   });
   postsModel.deletePosts(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('Error Delete Post');
@@ -139,29 +120,57 @@ exports.countComment = (req, res) => {
     return res.status(200).send({ message: 'countSuccess', data: results });
   });
 };
-exports.countView = async (req, res) => {
-  const postID = req.params.postID;
-  const userID = req.session.user.email;
 
-  try {
-    const addView = await postsModel.addView(postID, userID);
-    const getView = await postsModel.getViewCount(postID);
-    res.status(200).json(getView);
-  } catch (error) {
-    res.status(500).send('조회수 송출중 에러');
-  }
-};
-exports.addLike = async (req, res) => {
+// exports.addView = (req, res) => {
+//   const postID = req.params.postID;
+// };
+exports.countView = (req, res) => {
+  const userID = req.session.user.id;
   const postID = req.params.postID;
-  const userID = req.session.user.email;
-  const addLike = await postsModel.addLike(postID, userID);
+  postsModel.addView(userID, postID, (err, results) => {
+    if (err) return res.status(500).send('add view error');
+  });
+  postsModel.countView(postID, (err, results) => {
+    if (err) return res.status(500).send('count view error');
+    return res.status(201).send({ data: results });
+  });
 };
-exports.countLike = async (req, res) => {
+
+exports.addLike = (req, res) => {
+  const userID = req.session.user.id;
   const postID = req.params.postID;
-  try {
-    const getLike = await postsModel.getLikeCount(postID);
-    res.status(200).json(getLike);
-  } catch (error) {
-    res.status(500).send('좋아요 송출중 에러');
-  }
+  postsModel.addLike(userID, postID, (err, results) => {
+    if (err) return res.status(500).send('add view error');
+  });
+  postsModel.countLike(postID, (err, results) => {
+    if (err) return res.status(500).send('count view error');
+    return res.status(201).send({ data: results });
+  });
+};
+
+exports.countLike = (req, res) => {
+  const postID = req.params.postID;
+  postsModel.countLike(postID, (err, results) => {
+    if (err) return res.status(500).send('count view error');
+    return res.status(201).send({ data: results });
+  });
+};
+exports.checkLike = (req, res) => {
+  const userID = req.session.user.id;
+  const postID = req.params.postID;
+  postsModel.checkLike(postID, userID, (err, results) => {
+    if (err) return res.status(500).send('error check like');
+    return res.status(201).send({ data: results });
+  });
+};
+exports.deleteLike = (req, res) => {
+  const userID = req.session.user.id;
+  const postID = req.params.postID;
+  postsModel.deleteLike(postID, userID, (err, results) => {
+    if (err) return res.status(500).send('error delete like');
+  });
+  postsModel.countLike(postID, (err, results) => {
+    if (err) return res.status(500).send('count view error');
+    return res.status(201).send({ data: results });
+  });
 };

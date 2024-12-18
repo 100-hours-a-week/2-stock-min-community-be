@@ -3,27 +3,19 @@ const path = require('path');
 
 const userModel = require('../models/userModel');
 
-// USER
-exports.getRegistPage = (req, res) => {
-  res.sendFile(
-    path.join(__dirname, '../../../fe/Public/Html/user_regist.html')
-  );
-};
-exports.getLoginPage = (req, res) => {
-  res.sendFile(path.join(__dirname, '../../../fe/Public/Html/user_login.html'));
-};
-exports.getModifyNicknamePage = (req, res) => {
-  res.sendFile(
-    path.join(__dirname, '../../../fe/Public/Html/user_nickname_modify.html')
-  );
-};
-exports.getModifyPasswordPage = (req, res) => {
-  res.sendFile(
-    path.join(__dirname, '../../../fe/Public/Html/user_password_modify.html')
-  );
-};
+// exports.getModifyNicknamePage = (req, res) => {
+//   res.sendFile(
+//     path.join(__dirname, '../../../fe/Public/Html/user_nickname_modify.html')
+//   );
+// };
+// exports.getModifyPasswordPage = (req, res) => {
+//   res.sendFile(
+//     path.join(__dirname, '../../../fe/Public/Html/user_password_modify.html')
+//   );
+// };
 
 exports.getCurrentUser = (req, res) => {
+  console.log(req.session.user);
   if (!req.session.user) {
     return res.status(401).json({ message: 'Unauthorized: No user logged in' });
   }
@@ -122,6 +114,7 @@ exports.login = (req, res) => {
     const user = results.find(
       (element) => element.email === email && element.password === password
     );
+    //로그인 정보가 일치하면 세션에 해당 정보 저장
     if (user) {
       req.session.user = {
         id: user.user_id,
@@ -132,7 +125,7 @@ exports.login = (req, res) => {
     } else {
       return;
     }
-
+    console.log(req.session);
     res.cookie('loggedIn', true, { httpOnly: true });
     return res.status(200).send('Login successful');
   });

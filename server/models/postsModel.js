@@ -119,6 +119,48 @@ function countComment(postID, callback) {
     callback(null, results);
   });
 }
+function addView(userID, postID, callback) {
+  const query = `INSERT IGNORE INTO viewaccount (user_id,post_id) VALUES (?,?)`;
+  connection.query(query, [userID, postID], (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+function countView(postID, callback) {
+  const query = `SELECT COUNT(user_id) AS cnt FROM viewaccount WHERE post_id = ${postID}`;
+  connection.query(query, (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+function addLike(userID, postID, callback) {
+  const query = `INSERT IGNORE INTO likeaccount (user_id,post_id) VALUES (?,?)`;
+  connection.query(query, [userID, postID], (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+function countLike(postID, callback) {
+  const query = `SELECT COUNT(user_id) AS cnt FROM likeaccount WHERE post_id = ${postID}`;
+  connection.query(query, (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+function checkLike(postID, userID, callback) {
+  const query = `SELECT COUNT(user_id) AS cnt FROM likeaccount WHERE post_id = ${postID} AND user_id = ${userID}`;
+  connection.query(query, (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+function deleteLike(postID, userID, callback) {
+  const query = `DELETE FROM likeaccount WHERE post_id = ${postID} AND user_id = ${userID}`;
+  connection.query(query, (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
 
 module.exports = {
   getPosts,
@@ -132,4 +174,10 @@ module.exports = {
   getPostImage,
   deletePostComment,
   countComment,
+  addView,
+  countView,
+  addLike,
+  countLike,
+  checkLike,
+  deleteLike,
 };

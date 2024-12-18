@@ -5,6 +5,7 @@ const postsRoutes = require('../be/server/routers/postsRouter');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
@@ -19,14 +20,19 @@ app.use(
   session({
     secret: '123456789',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-      httpOnly: true,
-      maxAge: 360000,
+      secure: false,
+      httpOnly: false,
     },
   })
 );
-
+app.use(
+  cors({
+    origin: 'http://localhost:5500', // 특정 프론트엔드 URL만 허용
+    credentials: true,
+  })
+);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
