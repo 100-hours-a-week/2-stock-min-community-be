@@ -11,24 +11,20 @@ function isAuthenticated(req, res, next) {
 }
 
 router.get('/', postsController.getPosts);
-
 router.post(
   '/',
-
   upload('postImage').single('postImage'),
   postsController.createPost
 );
-
 router.patch(
   '/:postID',
-
   upload('postImage').single('postIMG'),
   postsController.updatePost
 );
 router.delete('/:postID', postsController.deletePost);
 
-// router.get('/new',  postsController.getPostNewPage);
-// router.get('/:postID',  postsController.getPostDetail);
+//내가 쓴 게시글, 댓글 목록 가져오기
+router.get('/auth', postsController.getAuthList);
 
 //LCV
 router.get(
@@ -36,15 +32,16 @@ router.get(
 
   postsController.countComment
 );
-router.get('/:postID/count/view', postsController.countView);
-router.get('/:postID/count/like', postsController.countLike);
+
 router.get('/:postID/check/like', postsController.checkLike);
+router.get('/:postID/count/like', postsController.countLike);
 router.post('/:postID/count/like', postsController.addLike);
 router.delete(
   '/:postID/count/like',
 
   postsController.deleteLike
 );
+router.get('/:postID/count/view', postsController.countView);
 
 // COMMENT
 router.get('/comment/:postID', postsController.getComment);

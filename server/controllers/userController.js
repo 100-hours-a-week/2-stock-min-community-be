@@ -15,12 +15,12 @@ const userModel = require('../models/userModel');
 // };
 
 exports.getCurrentUser = (req, res) => {
-  console.log(req.session.user);
   if (!req.session.user) {
     return res.status(401).json({ message: 'Unauthorized: No user logged in' });
   }
 
   res.status(200).json({
+    id: req.session.user.id,
     email: req.session.user.email,
     nickname: req.session.user.nickname,
     profile: req.session.user.profile,
@@ -125,7 +125,7 @@ exports.login = (req, res) => {
     } else {
       return;
     }
-    console.log(req.session);
+
     res.cookie('loggedIn', true, { httpOnly: true });
     return res.status(200).send('Login successful');
   });

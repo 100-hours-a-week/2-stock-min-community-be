@@ -1,5 +1,6 @@
 const fs = require('fs');
 const postsModel = require('../models/postsModel');
+const moment = require('moment');
 const path = require('path');
 
 exports.createPost = (req, res) => {
@@ -50,6 +51,7 @@ exports.updatePost = (req, res) => {
     res.status(200).send({ message: 'Post Update Success' });
   });
 };
+
 exports.deletePost = (req, res) => {
   postsModel.getPostImage(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('get Post Image');
@@ -74,7 +76,27 @@ exports.deletePost = (req, res) => {
 exports.getPosts = (req, res) => {
   postsModel.getPosts((err, results) => {
     if (err) return res.status(500).send('Error get Post Data');
+
     return res.status(200).send({ data: results });
+  });
+};
+
+//내가 쓴 게시글, 댓글 목록
+exports.getAuthList = (req, res) => {
+  const userID = req.session.user.id;
+  const authList = {
+    post: '',
+    comment: '',
+  };
+  postsModel.getAuthPosts(userID, (err, results) => {
+    if (err) return res.status(501).status('게시글 권한 목록 받아오기 에러');
+    authList.post = results;
+  });
+  postsModel.getAuthComments(userID, (err, results) => {
+    if (err) return res.status(501).status('댓글 권한 목록 받아오기 에러');
+    authList.comment = results;
+
+    return res.status(201).send(authList);
   });
 };
 
@@ -89,7 +111,7 @@ exports.createComment = (req, res) => {
   });
 };
 exports.getComment = (req, res) => {
-  postsModel.getComment(req.params.postID, (err, results) => {
+  postsModel.getPostComment(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('Error Get Comment');
     return res
       .status(200)
@@ -121,20 +143,16 @@ exports.countComment = (req, res) => {
   });
 };
 
-// exports.addView = (req, res) => {
-//   const postID = req.params.postID;
-// };
 exports.countView = (req, res) => {
-  console.log(req.session);
   const userID = req.session.user.id;
   const postID = req.params.postID;
   postsModel.addView(userID, postID, (err, results) => {
     if (err) return res.status(500).send('add view error');
   });
-  postsModel.countView(postID, (err, results) => {
-    if (err) return res.status(500).send('count view error');
-    return res.status(201).send({ data: results });
-  });
+  // postsModel.countView(postID, (err, results) => {
+  //   if (err) return res.status(500).send('count view error');
+  //   return res.status(201).send({ data: results });
+  // });
 };
 
 exports.addLike = (req, res) => {
@@ -143,19 +161,19 @@ exports.addLike = (req, res) => {
   postsModel.addLike(userID, postID, (err, results) => {
     if (err) return res.status(500).send('add view error');
   });
-  postsModel.countLike(postID, (err, results) => {
-    if (err) return res.status(500).send('count view error');
-    return res.status(201).send({ data: results });
-  });
+  // postsModel.countLike(postID, (err, results) => {
+  //   if (err) return res.status(500).send('count view error');
+  //   return res.status(201).send({ data: results });
+  // });
 };
 
-exports.countLike = (req, res) => {
-  const postID = req.params.postID;
-  postsModel.countLike(postID, (err, results) => {
-    if (err) return res.status(500).send('count view error');
-    return res.status(201).send({ data: results });
-  });
-};
+// exports.countLike = (req, res) => {
+//   const postID = req.params.postID;
+//   postsModel.countLike(postID, (err, results) => {
+//     if (err) return res.status(500).send('count view error');
+//     return res.status(201).send({ data: results });
+//   });
+// };
 exports.checkLike = (req, res) => {
   const userID = req.session.user.id;
   const postID = req.params.postID;
@@ -170,8 +188,9 @@ exports.deleteLike = (req, res) => {
   postsModel.deleteLike(postID, userID, (err, results) => {
     if (err) return res.status(500).send('error delete like');
   });
-  postsModel.countLike(postID, (err, results) => {
-    if (err) return res.status(500).send('count view error');
-    return res.status(201).send({ data: results });
-  });
+
+  // postsModel.countLike(postID, (err, results) => {
+  //   if (err) return res.status(500).send('count view error');
+  //   return res.status(201).send({ data: results });
+  // });
 };
