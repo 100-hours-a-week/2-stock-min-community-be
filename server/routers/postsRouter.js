@@ -27,21 +27,14 @@ router.delete('/:postID', postsController.deletePost);
 router.get('/auth', postsController.getAuthList);
 
 //LCV
-router.get(
-  '/:postID/count/comment',
-
-  postsController.countComment
-);
+router.get('/:postID/count/comment', postsController.countComment);
 
 router.get('/:postID/check/like', postsController.checkLike);
-router.get('/:postID/count/like', postsController.countLike);
-router.post('/:postID/count/like', postsController.addLike);
-router.delete(
-  '/:postID/count/like',
 
-  postsController.deleteLike
-);
-router.get('/:postID/count/view', postsController.countView);
+router.get('/:postID/count/like', postsController.addLike);
+router.delete('/:postID/count/like', postsController.deleteLike);
+router.get('/:postID/count/view', postsController.addView);
+router.get('/lcv/:postID', postsController.getPostLCV);
 
 // COMMENT
 router.get('/comment/:postID', postsController.getComment);

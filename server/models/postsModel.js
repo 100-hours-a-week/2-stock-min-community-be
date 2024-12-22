@@ -12,15 +12,9 @@ function getPostImage(postID, callback) {
     callback(null, results);
   });
 }
-function getPostLCV(postID, callback) {
-  const query = `SELECT p.post_id,COUNT(DISTINCT l.user_id) AS like_count,COUNT(DISTINCT c.comment_id) AS comment_count,COUNT(DISTINCT v.user_id) AS view_count FROM POSTS p LEFT JOIN likeaccount l ON p.post_id = l.post_id LEFT JOIN COMMENT c ON p.post_id = c.post_id LEFT JOIN viewaccount v ON p.post_id = v.post_id WHERE p.post_id = 27 GROUP BY p.post_id;`;
-  connection.query(query, (err, results) => {
-    if (err) return callback(err, null);
-    callback(null, results);
-  });
-}
+
 function getPosts(callback) {
-  const query = `SELECT p.post_id,p.title,COUNT(DISTINCT l.user_id) AS like_count,COUNT(DISTINCT c.comment_id) AS comment_count,COUNT(DISTINCT v.user_id) AS view_count,p.postDate,p.autorProfile,p.autor FROM POSTS p LEFT JOIN likeaccount l ON p.post_id = l.post_id LEFT JOIN COMMENT c ON p.post_id = c.post_id LEFT JOIN viewaccount v ON p.post_id = v.post_id GROUP BY p.post_id;`;
+  const query = `SELECT p.*,COUNT(DISTINCT l.user_id) AS like_count,COUNT(DISTINCT c.comment_id) AS comment_count,COUNT(DISTINCT v.user_id) AS view_count,p.postDate,p.autorProfile,p.autor FROM POSTS p LEFT JOIN likeaccount l ON p.post_id = l.post_id LEFT JOIN COMMENT c ON p.post_id = c.post_id LEFT JOIN viewaccount v ON p.post_id = v.post_id GROUP BY p.post_id;`;
   connection.query(query, (err, results) => {
     if (err) return callback(err, null);
     callback(null, results);
@@ -37,7 +31,7 @@ function getAuthPosts(userID, callback) {
 }
 
 function addPosts(post, callback) {
-  const query = `INSERT INTO POSTS (user_id,postImage, title, content, \`like\`, comment, view, postDate, autor,autorProfile) VALUES (?,?,?,?,?,?,?,?,?,?)`;
+  const query = `INSERT INTO POSTS (user_id,postImage, title, content, postDate, autor,autorProfile) VALUES (?,?,?,?,?,?,?)`;
   connection.query(
     query,
     [
@@ -45,9 +39,6 @@ function addPosts(post, callback) {
       post.postImage,
       post.title,
       post.content,
-      post.like,
-      post.comment,
-      post.view,
       post.postDate,
       post.autor,
       post.autorProfile,
@@ -134,13 +125,14 @@ function deletePostComment(postID, callback) {
 }
 
 //LCV
-function countComment(postID, callback) {
-  const query = `SELECT COUNT(content) AS cnt FROM COMMENT WHERE post_id = ${postID}`;
+function getPostLCV(postID, callback) {
+  const query = `SELECT p.post_id,COUNT(DISTINCT l.user_id) AS like_count,COUNT(DISTINCT c.comment_id) AS comment_count,COUNT(DISTINCT v.user_id) AS view_count FROM POSTS p LEFT JOIN likeaccount l ON p.post_id = l.post_id LEFT JOIN COMMENT c ON p.post_id = c.post_id LEFT JOIN viewaccount v ON p.post_id = v.post_id WHERE p.post_id = ${postID} GROUP BY p.post_id;`;
   connection.query(query, (err, results) => {
     if (err) return callback(err, null);
     callback(null, results);
   });
 }
+
 function addView(userID, postID, callback) {
   const query = `INSERT IGNORE INTO viewaccount (user_id,post_id) VALUES (?,?)`;
   connection.query(query, [userID, postID], (err, results) => {
@@ -148,13 +140,7 @@ function addView(userID, postID, callback) {
     callback(null, results);
   });
 }
-function countView(postID, callback) {
-  const query = `SELECT COUNT(user_id) AS cnt FROM viewaccount WHERE post_id = ${postID}`;
-  connection.query(query, (err, results) => {
-    if (err) return callback(err, null);
-    callback(null, results);
-  });
-}
+
 function addLike(userID, postID, callback) {
   const query = `INSERT IGNORE INTO likeaccount (user_id,post_id) VALUES (?,?)`;
   connection.query(query, [userID, postID], (err, results) => {
@@ -162,13 +148,7 @@ function addLike(userID, postID, callback) {
     callback(null, results);
   });
 }
-function countLike(postID, callback) {
-  const query = `SELECT COUNT(user_id) AS cnt FROM likeaccount WHERE post_id = ${postID}`;
-  connection.query(query, (err, results) => {
-    if (err) return callback(err, null);
-    callback(null, results);
-  });
-}
+
 function checkLike(postID, userID, callback) {
   const query = `SELECT COUNT(user_id) AS cnt FROM likeaccount WHERE post_id = ${postID} AND user_id = ${userID}`;
   connection.query(query, (err, results) => {
@@ -195,11 +175,11 @@ module.exports = {
   patchComment,
   getPostImage,
   deletePostComment,
-  countComment,
+
   addView,
-  countView,
+
   addLike,
-  countLike,
+
   checkLike,
   deleteLike,
   getAuthComments,

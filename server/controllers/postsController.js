@@ -11,9 +11,6 @@ exports.createPost = (req, res) => {
     userID: req.session.user.id,
     title,
     content,
-    like: 0,
-    comment: 0,
-    view: 0,
     postDate,
     autor: req.session.user.nickname,
     autorProfile: req.session.user.profile,
@@ -135,7 +132,7 @@ exports.patchComment = (req, res) => {
   );
 };
 
-//Count
+//LCV Count
 exports.countComment = (req, res) => {
   postsModel.countComment(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('Error Count Comment');
@@ -143,16 +140,20 @@ exports.countComment = (req, res) => {
   });
 };
 
-exports.countView = (req, res) => {
+exports.getPostLCV = (req, res) => {
+  postsModel.getPostLCV(req.params.postID, (err, results) => {
+    if (err) return res.status(500).send('get LCV error');
+    return res.status(201).send(results);
+  });
+};
+
+exports.addView = (req, res) => {
   const userID = req.session.user.id;
   const postID = req.params.postID;
   postsModel.addView(userID, postID, (err, results) => {
     if (err) return res.status(500).send('add view error');
+    return res.status(201).send('add view success');
   });
-  // postsModel.countView(postID, (err, results) => {
-  //   if (err) return res.status(500).send('count view error');
-  //   return res.status(201).send({ data: results });
-  // });
 };
 
 exports.addLike = (req, res) => {
@@ -160,20 +161,10 @@ exports.addLike = (req, res) => {
   const postID = req.params.postID;
   postsModel.addLike(userID, postID, (err, results) => {
     if (err) return res.status(500).send('add view error');
+    return res.status(201).send('add like');
   });
-  // postsModel.countLike(postID, (err, results) => {
-  //   if (err) return res.status(500).send('count view error');
-  //   return res.status(201).send({ data: results });
-  // });
 };
 
-// exports.countLike = (req, res) => {
-//   const postID = req.params.postID;
-//   postsModel.countLike(postID, (err, results) => {
-//     if (err) return res.status(500).send('count view error');
-//     return res.status(201).send({ data: results });
-//   });
-// };
 exports.checkLike = (req, res) => {
   const userID = req.session.user.id;
   const postID = req.params.postID;
@@ -187,10 +178,6 @@ exports.deleteLike = (req, res) => {
   const postID = req.params.postID;
   postsModel.deleteLike(postID, userID, (err, results) => {
     if (err) return res.status(500).send('error delete like');
+    return res.status(201).send('delete like');
   });
-
-  // postsModel.countLike(postID, (err, results) => {
-  //   if (err) return res.status(500).send('count view error');
-  //   return res.status(201).send({ data: results });
-  // });
 };
