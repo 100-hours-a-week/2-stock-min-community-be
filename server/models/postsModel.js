@@ -13,6 +13,15 @@ function getPostImage(postID, callback) {
   });
 }
 
+//게시글 수정할 때 전에 내용 불러오기 위함
+function getPostContent(postID, callback) {
+  const query = `SELECT postImage,title,content FROM POSTS WHERE post_id = ${postID}`;
+  connection.query(query, (err, results) => {
+    if (err) return callback(err, null);
+    callback(null, results);
+  });
+}
+
 function getPosts(callback) {
   const query = `SELECT p.*,COUNT(DISTINCT l.user_id) AS like_count,COUNT(DISTINCT c.comment_id) AS comment_count,COUNT(DISTINCT v.user_id) AS view_count,p.postDate,p.autorProfile,p.autor FROM POSTS p LEFT JOIN likeaccount l ON p.post_id = l.post_id LEFT JOIN COMMENT c ON p.post_id = c.post_id LEFT JOIN viewaccount v ON p.post_id = v.post_id GROUP BY p.post_id;`;
   connection.query(query, (err, results) => {
@@ -21,6 +30,7 @@ function getPosts(callback) {
   });
 }
 
+//내가 쓴 게시글 불러오기
 function getAuthPosts(userID, callback) {
   const query = `SELECT post_id FROM POSTS WHERE user_id = ${userID}`;
   connection.query(query, (err, results) => {
@@ -87,6 +97,7 @@ function addComment(postID, data, callback) {
     }
   );
 }
+//내가 쓴 댓글들 불러오기
 function getAuthComments(userID, callback) {
   const query = `SELECT comment_id FROM COMMENT WHERE user_id = ${userID}`;
   connection.query(query, (err, results) => {
@@ -166,6 +177,7 @@ function deleteLike(postID, userID, callback) {
 
 module.exports = {
   getPosts,
+  getPostContent,
   addPosts,
   deletePosts,
   addComment,

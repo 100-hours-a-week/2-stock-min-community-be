@@ -16,6 +16,7 @@ router.post(
   upload('postImage').single('postImage'),
   postsController.createPost
 );
+router.get('/content/:postID', postsController.getPostContent);
 router.patch(
   '/:postID',
   upload('postImage').single('postIMG'),
@@ -39,15 +40,7 @@ router.get('/lcv/:postID', postsController.getPostLCV);
 // COMMENT
 router.get('/comment/:postID', postsController.getComment);
 router.post('/comment/:postID', postsController.createComment);
-router.patch(
-  '/comment/:commentID',
-
-  postsController.patchComment
-);
-router.delete(
-  '/comment/:commentID',
-
-  postsController.deleteComment
-);
+router.patch('/comment/:commentID', postsController.patchComment);
+router.delete('/comment/:commentID', postsController.deleteComment);
 
 module.exports = router;

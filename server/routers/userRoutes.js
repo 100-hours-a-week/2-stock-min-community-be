@@ -23,7 +23,11 @@ router.get('/logout', userController.logout);
 router.get('/users', userController.fetchUsers);
 
 router.get('/user', userController.getCurrentUser);
-router.patch('/user', userController.patchUser);
+router.patch(
+  '/user',
+  upload('profile').single('profile'),
+  userController.patchUser
+);
 router.delete('/user', userController.deleteUser);
 
 router.post('/check-duplicated', userController.checkDuplicated);

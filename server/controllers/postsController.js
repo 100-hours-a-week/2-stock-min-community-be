@@ -73,8 +73,13 @@ exports.deletePost = (req, res) => {
 exports.getPosts = (req, res) => {
   postsModel.getPosts((err, results) => {
     if (err) return res.status(500).send('Error get Post Data');
-
     return res.status(200).send({ data: results });
+  });
+};
+exports.getPostContent = (req, res) => {
+  postsModel.getPostContent(req.params.postID, (err, results) => {
+    if (err) return res.status(500).send('Error Get Post Content');
+    return res.status(201).send(results);
   });
 };
 

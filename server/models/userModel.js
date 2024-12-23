@@ -46,7 +46,7 @@ function deleteUser(id, callback) {
   });
 }
 function patchUser(patchData, callback) {
-  const query = `UPDATE USER SET ${patchData.field} = '${patchData.data}' WHERE user_id = ${patchData.id}`;
+  const query = `UPDATE USER SET ${patchData.field} = '${patchData.data}',profile = '${patchData.profile}' WHERE user_id = ${patchData.id}`;
   connection.query(query, (err, results) => {
     if (err) {
       return callback(err, null);

@@ -45,6 +45,8 @@ exports.createUser = (req, res) => {
 exports.deleteUser = (req, res) => {
   const id = req.session.user.id;
   const filePathProfile = path.join(__dirname, `..${req.session.user.profile}`);
+
+  //작성자가 지금까지 작성했던 게시글의 이미지 전부 삭제
   userModel.deleteUserPostImage(id, (err, results) => {
     if (err) return res.status(500).send('get PostImage error');
 
@@ -66,8 +68,7 @@ exports.deleteUser = (req, res) => {
   });
   userModel.deleteUser(id, (error, results) => {
     if (error) {
-      res.status(500).send('회원탈퇴 실패');
-      return;
+      return res.status(500).send('회원탈퇴 실패');
     }
     fs.unlink(filePathProfile, (err) => {
       if (err) {
@@ -89,16 +90,41 @@ exports.deleteUser = (req, res) => {
 };
 exports.patchUser = (req, res) => {
   const { data, field } = req.body;
+  const profile = req.file
+    ? `/uploads/profile/${req.file.filename}`
+    : req.session.user.profile;
 
   const id = req.session.user.id;
+
   const patchData = {
     data,
     field,
+    profile,
     id,
   };
+
   userModel.patchUser(patchData, (err, results) => {
     if (err) {
       return res.status(500).send('Error Patch User');
+    }
+    if (field === 'nickname') {
+      const filePathProfile = path.join(
+        __dirname,
+        `..${req.session.user.profile}`
+      );
+      req.session.user.nickname = data;
+      if (patchData.profile !== req.session.user.profile) {
+        console.log(patchData.profile);
+        console.log(req.session.user.profile);
+        fs.unlink(filePathProfile, (err) => {
+          if (err) {
+            console.error('파일 삭제 중 오류 발생', err);
+          } else {
+            console.log('파일 삭제 성공');
+          }
+        });
+      }
+      req.session.user.profile = patchData.profile;
     }
     res.status(200).send({ message: 'User Patch Success' });
   });
