@@ -50,7 +50,7 @@ exports.deleteUser = (req, res) => {
   userModel.deleteUserPostImage(id, (err, results) => {
     if (err) return res.status(500).send('get PostImage error');
 
-    if (results) {
+    if (results[0].postImage) {
       results.map((element) => {
         const filePathPostImage = path.join(
           __dirname,

@@ -28,7 +28,7 @@ exports.updatePost = (req, res) => {
   //전에 있던 이미지 파일 삭제
   postsModel.getPostImage(req.body.postID, (err, results) => {
     if (err) return res.status(500).send('Error get postImage');
-    if (results.postImage) {
+    if (results[0].postImage) {
       const filePath = path.join(__dirname, `..${results[0].postImage}`);
       fs.unlink(filePath, (err) => {
         if (err) {
