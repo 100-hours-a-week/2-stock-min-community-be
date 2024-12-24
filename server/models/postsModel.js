@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const connection = require('../db');
+const connection = require('../../db');
 
 // 파일 경로 설정
 const filePath = path.join(__dirname, '../data/posts.json');

@@ -1,4 +1,4 @@
-const connection = require('../db');
+const connection = require('../../db');
 
 // 사용자 데이터 가져오기
 function getUsers(callback) {

@@ -50,20 +50,21 @@ exports.deleteUser = (req, res) => {
   userModel.deleteUserPostImage(id, (err, results) => {
     if (err) return res.status(500).send('get PostImage error');
 
-    if (results[0].postImage) {
-      results.map((element) => {
-        const filePathPostImage = path.join(
-          __dirname,
-          `..${element.postImage}`
-        );
-        fs.unlink(filePathPostImage, (err) => {
-          if (err) {
-            console.error('파일 삭제 중 오류 발생', err);
-          } else {
-            console.log('파일 삭제 성공');
-          }
+    if (results[0]) {
+      if (results[0].postImage)
+        results.map((element) => {
+          const filePathPostImage = path.join(
+            __dirname,
+            `..${element.postImage}`
+          );
+          fs.unlink(filePathPostImage, (err) => {
+            if (err) {
+              console.error('파일 삭제 중 오류 발생', err);
+            } else {
+              console.log('파일 삭제 성공');
+            }
+          });
         });
-      });
     }
   });
   userModel.deleteUser(id, (error, results) => {
