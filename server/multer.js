@@ -1,6 +1,6 @@
-const multer = require('multer');
+import multer from 'multer';
 
-const path = require('path');
+import path from 'path';
 
 const storage = (storagePath) =>
   multer.diskStorage({
@@ -28,11 +28,9 @@ const fileFilter = (req, file, cb) => {
     cb(new Error('이미지 파일만 업로드 가능합니다.'));
   }
 };
-const upload = (storagePath) =>
+export const upload = (storagePath) =>
   multer({
     storage: storage(storagePath),
     fileFilter,
     limits: { fileSize: 5 * 1024 * 1024 },
   });
-
-module.exports = upload;

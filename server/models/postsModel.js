@@ -1,6 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const connection = require('../../db');
+import { fileURLToPath } from 'url';
+import path from 'path';
+import connection from '../../db.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 파일 경로 설정
 const filePath = path.join(__dirname, '../data/posts.json');
@@ -175,7 +178,7 @@ function deleteLike(postID, userID, callback) {
   });
 }
 
-module.exports = {
+export default {
   getPosts,
   getPostContent,
   addPosts,
@@ -187,11 +190,8 @@ module.exports = {
   patchComment,
   getPostImage,
   deletePostComment,
-
   addView,
-
   addLike,
-
   checkLike,
   deleteLike,
   getAuthComments,

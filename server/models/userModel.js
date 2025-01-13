@@ -1,4 +1,4 @@
-const connection = require('../../db');
+import connection from '../../db.js';
 
 // 사용자 데이터 가져오기
 function getUsers(callback) {
@@ -65,7 +65,7 @@ function deleteUserPostImage(userID, callback) {
   });
 }
 
-module.exports = {
+export default {
   getUsers,
   addUser,
   isDuplicated,

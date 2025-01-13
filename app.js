@@ -1,17 +1,22 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const userRoutes = require('../be/server/routers/userRoutes');
-const postsRoutes = require('../be/server/routers/postsRouter');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const cors = require('cors');
+import express from 'express';
+import bodyParser from 'body-parser';
+import userRoutes from './server/routers/userRoutes.js';
+import postsRoutes from './server/routers/postsRouter.js';
+import path from 'path';
+import session from 'express-session';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+import helmet from 'helmet';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(helmet());
 
 app.use('/uploads', express.static(path.join(__dirname, 'server', 'uploads')));
 // app.use(express.static(path.join(__dirname, '../fe/Public')));

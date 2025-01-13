@@ -1,20 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const userModel = require('../models/userModel');
+import userModel from '../models/userModel.js';
 
-// exports.getModifyNicknamePage = (req, res) => {
-//   res.sendFile(
-//     path.join(__dirname, '../../../fe/Public/Html/user_nickname_modify.html')
-//   );
-// };
-// exports.getModifyPasswordPage = (req, res) => {
-//   res.sendFile(
-//     path.join(__dirname, '../../../fe/Public/Html/user_password_modify.html')
-//   );
-// };
-
-exports.getCurrentUser = (req, res) => {
+function getCurrentUser(req, res) {
   if (!req.session.user) {
     return res.status(401).json({ message: 'Unauthorized: No user logged in' });
   }
@@ -25,9 +14,9 @@ exports.getCurrentUser = (req, res) => {
     nickname: req.session.user.nickname,
     profile: req.session.user.profile,
   });
-};
+}
 
-exports.createUser = (req, res) => {
+function createUser(req, res) {
   const userData = req.body;
 
   const profilePath = req.file ? `/uploads/profile/${req.file.filename}` : null;
@@ -41,8 +30,8 @@ exports.createUser = (req, res) => {
     }
     res.status(201).json({ message: '사용자 추가 성공', id: results.email });
   });
-};
-exports.deleteUser = (req, res) => {
+}
+function deleteUser(req, res) {
   const id = req.session.user.id;
   const filePathProfile = path.join(__dirname, `..${req.session.user.profile}`);
 
@@ -88,8 +77,8 @@ exports.deleteUser = (req, res) => {
       res.status(200).send('User successfully deleted');
     });
   });
-};
-exports.patchUser = (req, res) => {
+}
+function patchUser(req, res) {
   const { data, field } = req.body;
   const profile = req.file
     ? `/uploads/profile/${req.file.filename}`
@@ -129,9 +118,9 @@ exports.patchUser = (req, res) => {
     }
     res.status(200).send({ message: 'User Patch Success' });
   });
-};
+}
 
-exports.login = (req, res) => {
+function login(req, res) {
   const { email, password } = req.body;
   userModel.getUsers((err, results) => {
     if (err) {
@@ -156,8 +145,8 @@ exports.login = (req, res) => {
     res.cookie('loggedIn', true, { httpOnly: true });
     return res.status(200).send('Login successful');
   });
-};
-exports.logout = (req, res) => {
+}
+function logout(req, res) {
   req.session.destroy((err) => {
     if (err) {
       console.error('세션 삭제 실패:', err);
@@ -166,8 +155,8 @@ exports.logout = (req, res) => {
     res.clearCookie('connect.sid'); // 세션 쿠키 삭제
     res.status(200).send('User successfully deleted');
   });
-};
-exports.fetchUsers = (req, res) => {
+}
+function fetchUsers(req, res) {
   userModel.getUsers((err, results) => {
     if (err) {
       res.status(500).send('can not access user info');
@@ -175,9 +164,9 @@ exports.fetchUsers = (req, res) => {
     }
     res.status(200).json(results);
   });
-};
+}
 
-exports.checkDuplicated = (req, res) => {
+function checkDuplicated(req, res) {
   const { data, field } = req.body;
 
   userModel.isDuplicated(field, (error, results) => {
@@ -191,4 +180,15 @@ exports.checkDuplicated = (req, res) => {
       return res.json({ duplicated: false });
     }
   });
+}
+
+export default {
+  checkDuplicated,
+  fetchUsers,
+  getCurrentUser,
+  createUser,
+  deleteUser,
+  patchUser,
+  login,
+  logout,
 };

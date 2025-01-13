@@ -1,7 +1,7 @@
-const express = require('express');
-const upload = require('../multer');
+import express from 'express';
+import { upload } from '../multer.js';
+import postsController from '../controllers/postsController.js';
 const router = express.Router();
-const postsController = require('../controllers/postsController');
 
 function isAuthenticated(req, res, next) {
   if (!req.session.user) {
@@ -43,4 +43,4 @@ router.post('/comment/:postID', postsController.createComment);
 router.patch('/comment/:commentID', postsController.patchComment);
 router.delete('/comment/:commentID', postsController.deleteComment);
 
-module.exports = router;
+export default router;

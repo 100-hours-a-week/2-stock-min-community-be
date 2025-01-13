@@ -1,9 +1,9 @@
-const fs = require('fs');
-const postsModel = require('../models/postsModel');
-const moment = require('moment');
-const path = require('path');
+import fs from 'fs';
+import postsModel from '../models/postsModel.js';
+import moment from 'moment';
+import path from 'path';
 
-exports.createPost = (req, res) => {
+function createPost(req, res) {
   const { title, content, postDate } = req.body;
 
   const postData = {
@@ -23,8 +23,8 @@ exports.createPost = (req, res) => {
     }
     res.status(200).send({ message: 'Post Add Success' });
   });
-};
-exports.updatePost = (req, res) => {
+}
+function updatePost(req, res) {
   //전에 있던 이미지 파일 삭제
   postsModel.getPostImage(req.body.postID, (err, results) => {
     if (err) return res.status(500).send('Error get postImage');
@@ -47,9 +47,9 @@ exports.updatePost = (req, res) => {
     if (err) return res.status(500).send('Error Update Post');
     res.status(200).send({ message: 'Post Update Success' });
   });
-};
+}
 
-exports.deletePost = (req, res) => {
+function deletePost(req, res) {
   postsModel.getPostImage(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('get Post Image');
 
@@ -69,22 +69,22 @@ exports.deletePost = (req, res) => {
 
     res.status(200).send({ message: 'Post Delete Success' });
   });
-};
-exports.getPosts = (req, res) => {
+}
+function getPosts(req, res) {
   postsModel.getPosts((err, results) => {
     if (err) return res.status(500).send('Error get Post Data');
     return res.status(200).send({ data: results });
   });
-};
-exports.getPostContent = (req, res) => {
+}
+function getPostContent(req, res) {
   postsModel.getPostContent(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('Error Get Post Content');
     return res.status(201).send(results);
   });
-};
+}
 
 //내가 쓴 게시글, 댓글 목록
-exports.getAuthList = (req, res) => {
+function getAuthList(req, res) {
   const userID = req.session.user.id;
   const authList = {
     post: '',
@@ -100,10 +100,10 @@ exports.getAuthList = (req, res) => {
 
     return res.status(201).send(authList);
   });
-};
+}
 
 // COMMENT
-exports.createComment = (req, res) => {
+function createComment(req, res) {
   req.body.userID = req.session.user.id;
   req.body.commentAutor = req.session.user.nickname;
   req.body.commentProfile = req.session.user.profile;
@@ -111,22 +111,22 @@ exports.createComment = (req, res) => {
     if (err) return res.status(500).send('Error Add Comment');
     return res.status(200).send({ message: 'Add Comment Success' });
   });
-};
-exports.getComment = (req, res) => {
+}
+function getComment(req, res) {
   postsModel.getPostComment(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('Error Get Comment');
     return res
       .status(200)
       .send({ message: 'Get Comment Success', data: results });
   });
-};
-exports.deleteComment = (req, res) => {
+}
+function deleteComment(req, res) {
   postsModel.deleteComment(req.params.commentID, (err, results) => {
     if (err) return res.status(500).send('Error Delete Comment');
     return res.status(200).send({ message: 'Delete Success' });
   });
-};
-exports.patchComment = (req, res) => {
+}
+function patchComment(req, res) {
   postsModel.patchComment(
     req.params.commentID,
     req.body.data,
@@ -135,54 +135,73 @@ exports.patchComment = (req, res) => {
       return res.status(200).send({ message: 'patch Comment Success' });
     }
   );
-};
+}
 
 //LCV Count
-exports.countComment = (req, res) => {
+function countComment(req, res) {
   postsModel.countComment(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('Error Count Comment');
     return res.status(200).send({ message: 'countSuccess', data: results });
   });
-};
+}
 
-exports.getPostLCV = (req, res) => {
+function getPostLCV(req, res) {
   postsModel.getPostLCV(req.params.postID, (err, results) => {
     if (err) return res.status(500).send('get LCV error');
     return res.status(201).send(results);
   });
-};
+}
 
-exports.addView = (req, res) => {
+function addView(req, res) {
   const userID = req.session.user.id;
   const postID = req.params.postID;
   postsModel.addView(userID, postID, (err, results) => {
     if (err) return res.status(500).send('add view error');
     return res.status(201).send('add view success');
   });
-};
+}
 
-exports.addLike = (req, res) => {
+function addLike(req, res) {
   const userID = req.session.user.id;
   const postID = req.params.postID;
   postsModel.addLike(userID, postID, (err, results) => {
     if (err) return res.status(500).send('add view error');
     return res.status(201).send('add like');
   });
-};
+}
 
-exports.checkLike = (req, res) => {
+function checkLike(req, res) {
   const userID = req.session.user.id;
   const postID = req.params.postID;
   postsModel.checkLike(postID, userID, (err, results) => {
     if (err) return res.status(500).send('error check like');
     return res.status(201).send({ data: results });
   });
-};
-exports.deleteLike = (req, res) => {
+}
+function deleteLike(req, res) {
   const userID = req.session.user.id;
   const postID = req.params.postID;
   postsModel.deleteLike(postID, userID, (err, results) => {
     if (err) return res.status(500).send('error delete like');
     return res.status(201).send('delete like');
   });
+}
+
+export default {
+  createPost,
+  updatePost,
+  deletePost,
+  getPosts,
+  getPostContent,
+  getAuthList,
+  createComment,
+  getComment,
+  deleteComment,
+  patchComment,
+  countComment,
+  getPostLCV,
+  addView,
+  addLike,
+  checkLike,
+  deleteLike,
 };

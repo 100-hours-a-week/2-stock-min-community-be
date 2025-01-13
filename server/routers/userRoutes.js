@@ -1,7 +1,7 @@
-const express = require('express');
-const upload = require('../multer');
+import express from 'express';
+import { upload } from '../multer.js';
+import userController from '../controllers/userController.js';
 const router = express.Router();
-const userController = require('../controllers/userController');
 
 function isAuthenticated(req, res, next) {
   if (!req.session.user) {
@@ -32,4 +32,4 @@ router.delete('/user', userController.deleteUser);
 
 router.post('/check-duplicated', userController.checkDuplicated);
 
-module.exports = router;
+export default router;
