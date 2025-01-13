@@ -1,7 +1,10 @@
 import fs from 'fs';
+import userModel from '../models/userModel.js';
+import { fileURLToPath } from 'url';
 import path from 'path';
 
-import userModel from '../models/userModel.js';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function getCurrentUser(req, res) {
   if (!req.session.user) {

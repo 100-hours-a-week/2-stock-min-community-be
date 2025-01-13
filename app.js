@@ -16,11 +16,14 @@ const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(helmet());
 
 app.use('/uploads', express.static(path.join(__dirname, 'server', 'uploads')));
 // app.use(express.static(path.join(__dirname, '../fe/Public')));
-
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.use(
   session({
     secret: '123456789',
@@ -34,7 +37,8 @@ app.use(
 );
 app.use(
   cors({
-    origin: 'http://localhost:5500', // 특정 프론트엔드 URL만 허용
+    origin: 'http://localhost:5500',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
 );
