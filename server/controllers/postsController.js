@@ -1,7 +1,10 @@
 import fs from 'fs';
 import postsModel from '../models/postsModel.js';
-import moment from 'moment';
+import { fileURLToPath } from 'url';
 import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function createPost(req, res) {
   const { title, content, postDate } = req.body;
