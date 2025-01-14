@@ -5,36 +5,44 @@
 
 ### Back-end Git Reamd.me Template ✅
 
-[<img src="https://img.shields.io/badge/-readme.md-important?style=flat&logo=google-chrome&logoColor=white" />]() [<img src="https://img.shields.io/badge/-tech blog-blue?style=flat&logo=google-chrome&logoColor=white" />]() [<img src="https://img.shields.io/badge/release-v0.0.0-yellow?style=flat&logo=google-chrome&logoColor=white" />]() 
-<br/> [<img src="https://img.shields.io/badge/프로젝트 기간-2022.12.10~2022.12.19-green?style=flat&logo=&logoColor=white" />]()
+[<img src="https://img.shields.io/badge/-readme.md-important?style=flat&logo=google-chrome&logoColor=white" />]() [<img src="https://img.shields.io/badge/-tech blog-blue?style=flat&logo=google-chrome&logoColor=white" />]() [<img src="https://img.shields.io/badge/release-v1.0.0-yellow?style=flat&logo=google-chrome&logoColor=white" />]() 
+<br/> [<img src="https://img.shields.io/badge/프로젝트 기간-2024.11.2~2025.1.14-green?style=flat&logo=&logoColor=white" />]()
 
 </div> 
 
 ## 📝 소개
-백엔드 깃 레파지토리의 README.md를 빠르게 작성하기 위해 만든 템플릿입니다.
+게시글과 댓글 작성을 통해 온라인 상에서 소통할 수 있는 가벼운 커뮤니티 사이트를 만들어 보았습니다. 
+해당 레포지토리는 커뮤니티의 BE에 대한 코드가 담겨있습니다.
 
-다음과 같은 내용을 작성할 수 있습니다.
-- 프로젝트 소개
-- 프로젝트 화면 구성 또는 프로토 타입
-- 프로젝트 API 설계
-- 사용한 기술 스택
-- 프로젝트 아키텍쳐
-- 기술적 이슈와 해결 과정
-- 프로젝트 팀원
-
-필요한 기술 스택에 대한 logo는 [skills 폴더](/skills/)에서 다운로드 받을 수 있습니다.
 
 <br />
 
-> 화면 구성과 프로토 타입 중 원하는 것을 사용해주세요.
+
 
 ### 화면 구성
-|Screen #1|Screen #2|
-|:---:|:---:|
-|<img src="https://user-images.githubusercontent.com/80824750/208456048-acbf44a8-cd71-4132-b35a-500047adbe1c.gif" width="400"/>|<img src="https://user-images.githubusercontent.com/80824750/208456234-fb5fe434-aa65-4d7a-b955-89098d5bbe0b.gif" width="400"/>|
+| 로그인 | 회원가입 |
+| :---: | :---: |
+|<img width="450" alt="login" src="https://github.com/user-attachments/assets/340dfbf2-6861-43de-846e-34c518dfe21e" /> | <img width="450" alt="register" src="https://github.com/user-attachments/assets/ddcb34e0-396d-4c49-928a-9fb647dacec3" /> |
+| 로그인 페이지입니다. | 회원가입 페이지입니다. |
 
-### 프로토타입
-<img src="https://user-images.githubusercontent.com/80824750/208454673-0449e49c-57c6-4a6b-86cf-66c5b1e623dc.png">
+
+| 게시글 목록 | 게시글 내용 |
+| :---: | :---: |
+|<img width="450" alt="post_list" src="https://github.com/user-attachments/assets/5ba8c456-2b4c-4d67-afec-b4ee902a31a8" /> | <img width="450" alt="post_detail" src="https://github.com/user-attachments/assets/84d77251-882f-496c-bdda-8f8466c160c6" /> |
+| 게시글 목록을 보여줍니다 | 해당 게시글의 내용을 보여줍니다 |
+
+
+| 게시글 작성 | 게시글 수정 |
+| :---: | :---: |
+|<img width="450" alt="post_add" src="https://github.com/user-attachments/assets/75b736e2-239c-4ec7-9d38-a8b93fbf23bb" />| <img width="450" alt="post_modify" src="https://github.com/user-attachments/assets/88afe440-694a-4640-a047-7e63038d336f" /> |
+| 게시글 작성 페이지 입니다. | 게시글 수정 페이지 입니다 |
+
+| 닉네임 수정 | 비밀번호 수정 |
+| :---: | :---: |
+| <img width="450" alt="modify_nickname" src="https://github.com/user-attachments/assets/348232c0-fbb1-40ae-9dc8-c16661c8a314" /> | <img width="450" alt="modify_password" src="https://github.com/user-attachments/assets/fafc1ef0-25bf-4781-9b66-d9ccd512d5c6" /> |
+| 닉네임 및 프로필사진 수정 페이지입니다. | 비밀번호를 변경할 수 있는 페이지입니다. |
+
+
 
 <br />
 
