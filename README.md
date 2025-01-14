@@ -49,8 +49,6 @@
 
 <br />
 
-## ⚙ 기술 스택
-> skills 폴더에 있는 아이콘을 이용할 수 있습니다.
 ### Back-end
 <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" width="120"><img src="https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB" width="110"><img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" width="80">
 
